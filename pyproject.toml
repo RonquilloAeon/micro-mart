@@ -5,7 +5,7 @@ description = "A demo store."
 authors = ["Martin R <23411718+RonquilloAeon@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "micro_mart"}]
+#packages = [{include = "micro_mart"}]
 
 [tool.poetry.dependencies]
 iam = {path = "iam", develop = true}
