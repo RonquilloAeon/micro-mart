@@ -8,9 +8,12 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+cuid2 = "^2.0.0"
 Django = "^4.2.4"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "^7.1.0"}
 psycopg2-binary = "^2.9.7"
 strawberry-graphql-django = "^0.16.0"
+django-choices-field = "^2.2.2"
 
 
 [build-system]
