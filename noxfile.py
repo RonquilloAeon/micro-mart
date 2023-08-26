@@ -27,7 +27,5 @@ def test(local_session):
         "test",
         "--keepdb",
         *local_session.posargs,
-        env={
-            "DB_NAME": "test_mm"
-        },
+        env={"DB_NAME": "test_mm"},
     )

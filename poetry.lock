@@ -26,6 +26,17 @@ files = [
 ]
 
 [[package]]
+name = "cuid2"
+version = "2.0.0"
+description = "Next generation GUIDs. Collision-resistant ids optimized for horizontal scaling and performance."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "cuid2-2.0.0-py3-none-any.whl", hash = "sha256:5105ae457fdd1448013f6de73008d221c2654766dd3dafd459ef02c59a34a077"},
+    {file = "cuid2-2.0.0.tar.gz", hash = "sha256:3595ca0b1f61ff9d65da1a3a1359d291e2243b682cdd52ed1e7bc05ab7b7247d"},
+]
+
+[[package]]
 name = "django"
 version = "4.2.4"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
@@ -318,4 +329,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "cef657de9d311f9ade502bbb89b36cd9daad865f83cf5a0e865da2de49e68ad3"
+content-hash = "f0bc40c7ef55f26ab2b10b14d0e39d560656bdb501f52a86469e2b2bb8240887"

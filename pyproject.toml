@@ -10,6 +10,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 iam = {path = "iam", develop = true}
 python = "^3.11"
+cuid2 = "^2.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
