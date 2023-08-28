@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "iam"
+version = "0.1.0"
+description = "Identity and Access Management with Django."
+authors = ["Martin R <23411718+RonquilloAeon@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Django = "^4.2.4"
+psycopg2-binary = "^2.9.7"
+strawberry-graphql-django = "^0.16.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

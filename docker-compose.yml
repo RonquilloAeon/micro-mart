@@ -1,0 +1,57 @@
+version: '3.9'
+services:
+  iam:
+    build:
+      context: iam
+      dockerfile: Dockerfile
+      target: development
+#    entrypoint: tail -f /dev/null
+    container_name: mm_iam
+    depends_on:
+      - db
+      - pool
+    env_file:
+      - ./iam/.env
+    environment:
+      - DB_HOST=pool
+      - DB_NAME=iam
+      - DB_PORT=6432
+      - DB_PASSWORD=pgpass
+      - DB_USER=mmadmin
+      - DEBUG=true
+      - ENVIRONMENT=development
+      - LOG_LEVEL=info
+      - SECRET_KEY=development_v3xncko0z_piam6q_wa8isugi_0gkdi0h9mc5y0
+    platform: linux/amd64
+    ports:
+      - "8010:8000"
+    restart: on-failure
+    volumes:
+      - ./iam/src:/app/src
+
+  db:
+    build:
+      context: db
+      dockerfile: Dockerfile
+    environment:
+      # See https://www.amarjanica.com/docker-multiple-postgres-databases
+      # And see https://github.com/mrts/docker-postgresql-multiple-databases
+      - POSTGRES_MULTIPLE_DATABASES=iam
+      - POSTGRES_PASSWORD=pgpass
+      - POSTGRES_USER=mmadmin
+    platform: linux/amd64
+    ports:
+      - "5432:5432"
+    restart: on-failure
+    volumes:
+      - ./.db:/var/lib/postgresql/data
+
+  pool:
+    build:
+      context: pool
+      dockerfile: Dockerfile
+    container_name: mm_db_pool
+    depends_on:
+      - db
+    platform: linux/amd64
+    restart: on-failure
