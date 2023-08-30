@@ -13,6 +13,17 @@ class CuidField(models.CharField):
         super().__init__(*args, **kwargs)
 
 
+class BaseManager(models.Manager):
+    """This manager discourages the use of typical Django factory methods
+    in new models in favor of methods alignd with our ubiquitous language."""
+
+    def create(self, *args, **kwargs):
+        raise NotImplementedError
+
+    def create_or_update(self, *args, **kwargs):
+        raise NotImplementedError
+
+
 class BaseModel(models.Model):
     id = CuidField(primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)

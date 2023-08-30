@@ -14,7 +14,7 @@ class Error:
 
 
 @dataclass
-class Resource:
+class Entity:
     id: typing.Any
     name: str
     data: typing.Optional[dict] = field(default_factory=dict)
@@ -23,7 +23,7 @@ class Resource:
 @dataclass
 class ServiceResult:
     errors: list[Error] = field(default_factory=list)
-    resources: list[Resource] = field(default_factory=list)
+    entities: list[Entity] = field(default_factory=list)
 
     @property
     def success(self) -> bool:
@@ -32,15 +32,21 @@ class ServiceResult:
     def add_error(self, message: str) -> None:
         self.errors.append(Error(message))
 
-    def add_resource(
+    def add_entity(
         self,
-        obj: typing.Any,
-        data: typing.Optional[dict] = None,
-        resource_id_attribute: str = "id",
+        entity: typing.Any,
+        data_attributes: typing.Optional[list[str]] = None,
+        entity_id_attribute: str = "id",
     ) -> None:
-        id_ = getattr(obj, resource_id_attribute, None)
-        name = obj.__class__.__name__
-        self.resources.append(Resource(id_, name, data or {}))
+        id_ = getattr(entity, entity_id_attribute, None)
+        name = entity.__class__.__name__
+
+        if data_attributes:
+            data = {attr: getattr(entity, attr, None) for attr in data_attributes}
+        else:
+            data = {}
+
+        self.entities.append(Entity(id_, name, data))
 
 
 T = typing.TypeVar("T")
@@ -51,7 +57,7 @@ Exceptions = dict[typing.Type[Exception], UserFriendlyMessage]
 
 _SYSTEM_EXCEPTIONS = {
     Exception: "Oops! Something went wrong.",
-    ObjectDoesNotExist: "Can't find the requested resource.",
+    ObjectDoesNotExist: "Can't find the requested entity.",
 }
 
 _BUSINESS_EXCEPTIONS = {
@@ -85,7 +91,7 @@ def execute_safely(
                 service_result = ServiceResult()
 
                 try:
-                    # If the exception
+                    # If the exception is not in our mapping, a KeyError will be raised.
                     service_result.add_error(all_exceptions[e.__class__])
                 except KeyError as e:
                     service_result.add_error(all_exceptions[Exception])
