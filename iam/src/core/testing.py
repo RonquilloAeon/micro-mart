@@ -2,6 +2,7 @@ import typing
 from unittest import mock
 
 from microservice_utils.google_cloud.adapters.pubsub import Publisher, Subscriber
+from strawberry_django.test.client import TestClient
 
 from iam import container
 
@@ -27,3 +28,13 @@ class DependencyOverrideMixin:
 
             dep = getattr(container, dep_name)
             dep.reset_override()
+
+
+class GraphQlMixin:
+    gql_client: typing.Optional[TestClient] = None
+
+    def query(self, *args, **kwargs):
+        if not self.gql_client:
+            self.gql_client = TestClient("/graphql")
+
+        return self.gql_client.query(*args, **kwargs)
