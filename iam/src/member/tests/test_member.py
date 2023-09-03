@@ -2,7 +2,6 @@ from django.test import TestCase
 from faker import Faker
 from strawberry.relay.utils import to_base64
 
-from core.models import CUID_GENERATOR
 from core.testing import DependencyOverrideMixin, GraphQlMixin
 from member.models import Member
 
@@ -81,7 +80,7 @@ class TestMemberSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
 
         self.assertEqual(result.data, expected_result)
 
-    def test_members(self):
+    def test_query_members(self):
         member_data = []
 
         for _ in range(5):

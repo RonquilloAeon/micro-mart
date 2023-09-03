@@ -35,7 +35,7 @@ services:
     environment:
       # See https://www.amarjanica.com/docker-multiple-postgres-databases
       # And see https://github.com/mrts/docker-postgresql-multiple-databases
-      - POSTGRES_MULTIPLE_DATABASES=iam
+      - POSTGRES_MULTIPLE_DATABASES=iam,retail
       - POSTGRES_PASSWORD=pgpass
       - POSTGRES_USER=mmadmin
     platform: linux/amd64
@@ -54,3 +54,31 @@ services:
       - db
     platform: linux/amd64
     restart: on-failure
+
+  retail:
+    build:
+      context: retail
+      dockerfile: Dockerfile
+      target: development
+    container_name: mm_retail
+    depends_on:
+      - db
+      - pool
+    env_file:
+      - ./retail/.env
+    environment:
+      - DB_HOST=pool
+      - DB_NAME=retail
+      - DB_PORT=6432
+      - DB_PASSWORD=pgpass
+      - DB_USER=mmadmin
+      - DEBUG=true
+      - ENVIRONMENT=development
+      - LOG_LEVEL=info
+      - SECRET_KEY=development_j2q7fzr1x_9m8vo6c_5lb3thye_x1w0u7k9qz6n2
+    platform: linux/amd64
+    ports:
+      - "8012:8000"
+    restart: on-failure
+    volumes:
+      - ./retail/src:/app/src

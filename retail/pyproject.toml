@@ -1,21 +1,20 @@
 [tool.poetry]
-name = "micro-mart"
+name = "retail"
 version = "0.1.0"
-description = "A demo store."
+description = "Retail and Products with Django"
 authors = ["Martin R <23411718+RonquilloAeon@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-iam = {path = "iam", develop = true}
-retail = {path = "retail", develop = true}
 python = "^3.11"
+cuid2 = "^2.0.0"
 dependency-injector = "^4.41.0"
+Django = "^4.2.4"
 microservice-utils = {extras = ["events", "gcp-pubsub"], version = "^0.11.0"}
-faker = "^19.3.1"
+psycopg2-binary = "^2.9.7"
+strawberry-graphql-django = "^0.16.0"
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
 
 [build-system]
 requires = ["poetry-core"]
