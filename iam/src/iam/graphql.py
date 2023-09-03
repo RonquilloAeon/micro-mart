@@ -1,10 +1,11 @@
 import strawberry
+from strawberry_django.optimizer import DjangoOptimizerExtension
 
 from member import schema as member_schema
 
 
 @strawberry.type
-class Query:
+class Query(member_schema.Query):
     ...
 
 
@@ -16,4 +17,7 @@ class Mutation(member_schema.Mutation):
 schema = strawberry.federation.Schema(
     query=Query,
     mutation=Mutation,
+    extensions=[
+        DjangoOptimizerExtension,
+    ],
 )

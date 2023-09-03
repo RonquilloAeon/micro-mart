@@ -1,4 +1,5 @@
 import strawberry
+from strawberry.relay.utils import to_base64
 from strawberry.scalars import JSON
 
 from .services import ServiceResult
@@ -29,7 +30,8 @@ def convert_service_result_to_mutation_result(
     entities = []
 
     for entity in service_result.entities:
-        entities.append(Entity(id=entity.id, name=entity.name, data=entity.data))
+        global_id = to_base64(entity.name, entity.id)
+        entities.append(Entity(id=global_id, name=entity.name, data=entity.data))
 
     return MutationResult(
         entities=entities,

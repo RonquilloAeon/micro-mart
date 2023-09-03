@@ -1,5 +1,6 @@
 from django.test import TestCase
 from faker import Faker
+from strawberry.relay.utils import to_base64
 
 from core.testing import DependencyOverrideMixin, GraphQlMixin
 from member.models import Member
@@ -39,10 +40,11 @@ class TestMemberSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
         )
 
         member = Member.objects.last()
+        member_id = to_base64("Member", member.id)
 
         expected_result = {
             "memberRegister": {
-                "entities": [{"id": member.id, "name": "Member", "data": {}}],
+                "entities": [{"id": member_id, "name": "Member", "data": {}}],
                 "errors": [],
                 "success": True,
             }
@@ -63,16 +65,16 @@ class TestMemberSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
                 }
             }
             """,
-            variables={"id": member.id},
+            variables={"id": member_id},
         )
 
         expected_result = {
             "member": {
-                "id": member.id,
+                "id": member_id,
                 "firstName": member.first_name,
                 "lastName": member.last_name,
                 "phoneNumber": member.phone_number,
-                "remoteId": member.remote_id,
+                "remoteId": str(member.remote_id),
             }
         }
 

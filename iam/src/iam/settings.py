@@ -16,9 +16,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
 
 def str_to_bool(string: str) -> bool:
     if string.lower() == "true":
@@ -33,6 +30,13 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = str_to_bool(os.getenv("DEBUG", "false"))
 
 ALLOWED_HOSTS = ["*"]
+
+# Application configuration
+
+GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
+SERVICE_NAME = "iam-service"
+GCP_NAMESPACE = f"{ENVIRONMENT}.{SERVICE_NAME}"
 
 
 # Application definition

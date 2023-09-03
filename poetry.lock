@@ -305,6 +305,20 @@ phonenumbers = ["phonenumbers (>=7.0.2)"]
 phonenumberslite = ["phonenumberslite (>=7.0.2)"]
 
 [[package]]
+name = "faker"
+version = "19.3.1"
+description = "Faker is a Python package that generates fake data for you."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "Faker-19.3.1-py3-none-any.whl", hash = "sha256:e2722fdf622cf24e974aaba15a3dee97a6f8b98d869bd827ff1af9c87695af46"},
+    {file = "Faker-19.3.1.tar.gz", hash = "sha256:a6624d9574623bb27dfca33fff94581cd7b23b562901db8ad59acbde9a52543e"},
+]
+
+[package.dependencies]
+python-dateutil = ">=2.4"
+
+[[package]]
 name = "google-api-core"
 version = "2.11.1"
 description = "Google API client core library"
@@ -1088,4 +1102,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "f67993f2b88d836642b63a223ea33a6a154d588c844e7c89f7cae1e11776ef6e"
+content-hash = "4122b634fad97655c9ff35e07d4bb40cbfbdd0ead43495ffa7ec06bd23cfe6e8"

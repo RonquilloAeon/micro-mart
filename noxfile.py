@@ -27,5 +27,11 @@ def test(local_session):
         "test",
         "--keepdb",
         *local_session.posargs,
-        env={"DB_NAME": "test_mm"},
+        env={
+            "DB_HOST": "localhost",
+            "DB_PASSWORD": "pgpass",
+            "DB_PORT": "5432",
+            "DB_NAME": "test_mm",
+            "DB_USER": "mmadmin",
+        },
     )
