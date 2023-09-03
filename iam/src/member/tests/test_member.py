@@ -2,6 +2,7 @@ from django.test import TestCase
 from faker import Faker
 from strawberry.relay.utils import to_base64
 
+from core.models import CUID_GENERATOR
 from core.testing import DependencyOverrideMixin, GraphQlMixin
 from member.models import Member
 
@@ -77,5 +78,98 @@ class TestMemberSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
                 "remoteId": str(member.remote_id),
             }
         }
+
+        self.assertEqual(result.data, expected_result)
+
+    def test_query_not_found(self):
+        fake_id = CUID_GENERATOR.generate()
+        member_id = to_base64("Member", fake_id)
+
+        result = self.query(
+            """
+            query ($id: GlobalID!) {
+                member(id: $id) {
+                    firstName
+                    lastName
+                }
+            }
+            """,
+            variables={"id": member_id},
+        )
+
+        expected_result = {"member": None}
+
+        self.assertEqual(result.data, expected_result)
+
+    def test_members(self):
+        member_data = []
+
+        for _ in range(5):
+            member_data.append(
+                {
+                    "email": self.faker.email(),
+                    "firstName": self.faker.first_name(),
+                    "lastName": self.faker.last_name(),
+                    "phoneNumber": self.faker.phone_number(),
+                    "remoteId": self.faker.uuid4(),
+                }
+            )
+
+        # Register members
+        for member in member_data:
+            self.query(
+                """
+                mutation ($input: MemberRegisterInput!) {
+                    memberRegister(input: $input) {
+                        entities {
+                            id
+                            name
+                            data
+                        }
+                        errors {
+                            message
+                        }
+                        success
+                    }
+                }
+                """,
+                variables={"input": member},
+            )
+
+        # Query for members
+        result = self.query(
+            """
+            query members($first: Int) {
+                members(first: $first) {
+                    edges {
+                        node {
+                            id
+                            firstName
+                            lastName
+                        }
+                    }
+                }
+            }
+            """
+        )
+
+        expected_edges = []
+
+        for member in member_data:
+            member_id = Member.objects.get(remote_id=member["remote_id"]).id
+
+            expected_edges.append(
+                {
+                    "node": {
+                        "id": member_id,
+                        "firstName": member["firstName"],
+                        "lastName": member["lastName"],
+                        "phoneNumber": member["phoneNumber"],
+                        "remoteId": member["remoteId"],
+                    }
+                }
+            )
+
+        expected_result = {"members": {"edges": expected_edges}}
 
         self.assertEqual(result.data, expected_result)
