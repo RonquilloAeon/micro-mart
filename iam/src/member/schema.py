@@ -50,3 +50,4 @@ class Mutation:
 @strawberry.type
 class Query:
     member: Member = relay.node()
+    members: relay.ListConnection[Member] = strawberry.django.connection()

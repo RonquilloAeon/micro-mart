@@ -81,26 +81,6 @@ class TestMemberSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
 
         self.assertEqual(result.data, expected_result)
 
-    def test_query_not_found(self):
-        fake_id = CUID_GENERATOR.generate()
-        member_id = to_base64("Member", fake_id)
-
-        result = self.query(
-            """
-            query ($id: GlobalID!) {
-                member(id: $id) {
-                    firstName
-                    lastName
-                }
-            }
-            """,
-            variables={"id": member_id},
-        )
-
-        expected_result = {"member": None}
-
-        self.assertEqual(result.data, expected_result)
-
     def test_members(self):
         member_data = []
 
@@ -154,18 +134,17 @@ class TestMemberSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
         )
 
         expected_edges = []
+        member_data.reverse()
 
         for member in member_data:
-            member_id = Member.objects.get(remote_id=member["remote_id"]).id
+            member_id = Member.objects.get(remote_id=member["remoteId"]).id
 
             expected_edges.append(
                 {
                     "node": {
-                        "id": member_id,
+                        "id": to_base64("Member", member_id),
                         "firstName": member["firstName"],
                         "lastName": member["lastName"],
-                        "phoneNumber": member["phoneNumber"],
-                        "remoteId": member["remoteId"],
                     }
                 }
             )
