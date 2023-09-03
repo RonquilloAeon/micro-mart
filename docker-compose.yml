@@ -5,7 +5,6 @@ services:
       context: iam
       dockerfile: Dockerfile
       target: development
-#    entrypoint: tail -f /dev/null
     container_name: mm_iam
     depends_on:
       - db
