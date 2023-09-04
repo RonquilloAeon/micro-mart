@@ -158,3 +158,5 @@ cython_debug/
 # Misc
 .DS_Store
 .db/
+
+*.graphql

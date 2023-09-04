@@ -38,6 +38,7 @@ class Product(relay.Node):
     id: relay.NodeID[str]
     categories: list[Category]
     description: str
+    is_available_for_purchase: bool
     name: str
     price: Decimal
     seller: str

@@ -1,0 +1,9 @@
+federation_version: =2.3.2
+
+subgraphs:
+  iam-service:
+    schema:
+      subgraph_url: http://localhost:8010/graphql
+  retail-service:
+    schema:
+      subgraph_url: http://localhost:8012/graphql

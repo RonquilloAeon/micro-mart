@@ -82,3 +82,20 @@ services:
     restart: on-failure
     volumes:
       - ./retail/src:/app/src
+
+  router:
+    container_name: mm_router
+    depends_on:
+      - iam
+      - retail
+    image: ghcr.io/apollographql/router:v1.28.1
+    environment:
+      APOLLO_ROUTER_SUPERGRAPH_PATH: /router/supergraph.graphql
+      APOLLO_ROUTER_CONFIG_PATH: /router/router.yml
+      APOLLO_ROUTER_LOG: debug
+      APOLLO_TELEMETRY_DISABLED: true
+    ports:
+      - 4000:4000
+    restart: on-failure
+    volumes:
+      - ./router/config:/router
