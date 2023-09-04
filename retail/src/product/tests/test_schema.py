@@ -40,13 +40,14 @@ class TestProductSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
 
         # Event check
         product = Product.objects.last()
-        product_id = to_base64("Product", product.id)
 
-        expected_event = events.ProductAdded(id=product_id, product_name=product.name)
+        expected_event = events.ProductAdded(
+            id=product.id, description=product.description, product_name=product.name
+        )
         calls = [
             call(
-                constants.INTERNAL_TOPIC_NAME,
-                EventEnvelope.create(expected_event).to_publishable_json(),
+                constants.EXTERNAL_TOPIC_NAME,
+                expected_event,
             )
         ]
         self.mocks["event_producer"].publish.assert_has_calls(calls)

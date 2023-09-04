@@ -25,7 +25,7 @@ class DependencyOverrideMixin:
 
     def reset_dependencies(self):
         for dep_name in self._mocks.keys():
-            del self._mocks[dep_name]
+            self._mocks[dep_name] = None
 
             dep = getattr(container, dep_name)
             dep.reset_override()

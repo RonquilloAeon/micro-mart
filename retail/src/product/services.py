@@ -3,9 +3,13 @@ from dataclasses import dataclass
 from decimal import Decimal
 
 from asgiref.sync import sync_to_async
+from dependency_injector.wiring import inject, Provide
 
+from adapters.streaming import EventProducer
 from core.services import ServiceResult, execute_safely
+from product import constants, events
 from product.models import Category, Product
+from retail.containers import Container
 
 
 @dataclass
@@ -52,16 +56,29 @@ class AddProductService:
 
         return result
 
-    def _add_product(self, data: ProductData) -> Product:
+    @inject
+    def _add_product(
+        self,
+        data: ProductData,
+        event_producer: EventProducer = Provide[Container.event_producer],
+    ) -> Product:
         price = Decimal(data.price)
 
-        return Product.objects.add(
+        product = Product.objects.add(
             description=data.description,
             name=data.name,
             price=price,
             seller=data.seller,
             slug=data.slug or None,
         )
+
+        # Publish event
+        event = events.ProductAdded(
+            id=product.id, description=product.description, product_name=product.name
+        )
+        event_producer.publish(constants.EXTERNAL_TOPIC_NAME, event)
+
+        return product
 
 
 @dataclass

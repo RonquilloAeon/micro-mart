@@ -7,5 +7,5 @@ class Container(containers.DeclarativeContainer):
     config = providers.Configuration()
 
     event_producer = providers.Singleton(
-        EventProducer, brokers=config.MESSAGING_BROKERS
+        EventProducer, brokers=config.MESSAGING_BROKERS, topic_namespace=config.SERVICE_NAME
     )

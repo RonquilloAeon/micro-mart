@@ -64,6 +64,7 @@ services:
     depends_on:
       - db
       - pool
+      - redpanda
     env_file:
       - ./retail/.env
     environment:
@@ -88,19 +89,28 @@ services:
       - redpanda start
       - --smp 1
       - --overprovisioned
-      - --node-id 0
-      - --kafka-addr PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
-      - --advertise-kafka-addr PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
-      - --pandaproxy-addr 0.0.0.0:8082
-      - --advertise-pandaproxy-addr localhost:8082
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+      - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
+      - --advertise-pandaproxy-addr internal://redpanda:8082,external://localhost:18082
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      - --rpc-addr redpanda:33145
+      - --advertise-rpc-addr redpanda:33145
     container_name: mm_redpanda
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
     image: docker.redpanda.com/redpandadata/redpanda:v23.2.8
     ports:
-      - 8081:8081
-      - 8082:8082
-      - 9092:9092
-      - 9644:9644
-      - 29092:29092
+      - "18081:18081"
+      - "18082:18082"
+      - "19092:19092"
+      - "19644:9644"
+    volumes:
+      - ./.redpanda:/var/lib/redpanda/data
 
   redpandaconsole:
     depends_on:
@@ -112,7 +122,7 @@ services:
       CONFIG_FILEPATH: /tmp/config.yml
       CONSOLE_CONFIG_FILE: |
         kafka:
-          brokers: ["redpanda:29092"]
+          brokers: ["redpanda:9092"]
           schemaRegistry:
             enabled: true
             urls: ["http://redpanda:8081"]
@@ -127,7 +137,7 @@ services:
               url: http://connect:8083
     image: docker.redpanda.com/redpandadata/console:latest
     ports:
-      - 8080:8080
+      - "8080:8080"
 
   router:
     container_name: mm_router

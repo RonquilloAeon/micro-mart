@@ -10,6 +10,10 @@ from iam import container
 class DependencyOverrideMixin:
     _mocks: dict[str, mock.Mock] = {}
 
+    @property
+    def mocks(self) -> dict[str, mock.Mock]:
+        return self._mocks
+
     def mock_dependencies(self):
         # These mocks let us inspect dependency calls when testing
         self._mocks["publisher"] = mock.Mock(spec=Publisher)
@@ -24,7 +28,7 @@ class DependencyOverrideMixin:
 
     def reset_dependencies(self):
         for dep_name in self._mocks.keys():
-            del self._mocks[dep_name]
+            self._mocks[dep_name] = None
 
             dep = getattr(container, dep_name)
             dep.reset_override()

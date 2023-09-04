@@ -11,4 +11,4 @@ You need `nox` and `nox-poetry` in your system python environment. I recommend u
 - `docker compose up`
 - Open the Redpanda console: localhost:8080
 - Add the following topics:
-    - 
+    - `retail-service.product`
