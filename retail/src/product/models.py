@@ -34,13 +34,13 @@ class CategoryManager(BaseManager):
         parent: typing.Optional["Category"] = None,
         slug: typing.Optional[str] = None,
     ):
+        slug = Category.to_slug(slug or name)
         category = Category(
             description=description,
             name=name,
             slug=slug,
         )
         category.save()
-        category.update_slug(slug or name)
 
         if parent:
             category.set_parent(parent)
@@ -96,11 +96,11 @@ class Product(BaseModel, SlugMixin):
 
     objects = ProductManager()
 
-    def add_to_category(self, category: Category):
-        self.categories.add(category)
+    def add_to_categories(self, *categories: Category):
+        self.categories.add(*categories)
 
-    def remove_from_category(self, category: Category):
-        self.categories.remove(category)
+    def remove_from_categories(self, *categories: Category):
+        self.categories.remove(*categories)
 
     def update_price(self, new_price: Decimal):
         raise NotImplementedError

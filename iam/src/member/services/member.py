@@ -21,7 +21,7 @@ class MemberData:
 
 class RegisterMemberService:
     @execute_safely
-    async def __call__(self, data: MemberData) -> Member:
+    async def __call__(self, data: MemberData) -> ServiceResult:
         result = ServiceResult()
 
         try:

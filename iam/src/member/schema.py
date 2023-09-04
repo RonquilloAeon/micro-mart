@@ -2,8 +2,8 @@ import typing
 from uuid import UUID
 
 import strawberry
-from strawberry import relay
 import strawberry_django
+from strawberry import relay
 
 from core.graphql import MutationResult, convert_service_result_to_mutation_result
 from member import models as member_models

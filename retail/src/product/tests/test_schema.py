@@ -73,6 +73,8 @@ class TestProductSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
             variables={"id": product_id},
         )
 
+        product_info["price"] = format(product_info["price"], ".2f")
+
         expected_result = {
             "product": {
                 "id": product_id,
@@ -103,7 +105,7 @@ class TestProductSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
 
         result = self.query(
             """
-            mutation ($input: ProductAddInput!) {
+            mutation ($input: CategoryAddInput!) {
                 categoryAdd(input: $input) {
                     entities {
                         id
@@ -122,7 +124,7 @@ class TestProductSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
         # Add product to category
         result = self.query(
             """
-            mutation ($input: ProductAddInput!) {
+            mutation ($input: ProductCategoriesInput!) {
                 productAddToCategories(input: $input) {
                     entities {
                         id
@@ -134,7 +136,7 @@ class TestProductSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
             variables={"input": {"categories": [category_id], "product": product_id}},
         )
 
-        self.assertTrue(result.data["productAddToCategory"]["success"])
+        self.assertTrue(result.data["productAddToCategories"]["success"])
 
         # Query for the product
         result = self.query(
@@ -156,6 +158,8 @@ class TestProductSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
             variables={"id": product_id},
         )
 
+        product_info["price"] = format(product_info["price"], ".2f")
+
         expected_result = {
             "product": {
                 "id": product_id,
@@ -170,8 +174,8 @@ class TestProductSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
         # Remove category
         result = self.query(
             """
-            mutation ($input: ProductAddInput!) {
-                productRemoveFromCategory(input: $input) {
+            mutation ($input: ProductCategoriesInput!) {
+                productRemoveFromCategories(input: $input) {
                     entities {
                         id
                     }
@@ -179,10 +183,10 @@ class TestProductSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
                 }
             }
             """,
-            variables={"input": {"category": category_id, "product": product_id}},
+            variables={"input": {"categories": [category_id], "product": product_id}},
         )
 
-        self.assertTrue(result.data["productRemoveFromCategory"]["success"])
+        self.assertTrue(result.data["productRemoveFromCategories"]["success"])
 
         # Query product again. This time, we don't expect any categories
         result = self.query(
