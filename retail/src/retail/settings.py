@@ -26,6 +26,8 @@ ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
 SERVICE_NAME = "retail-service"
 GCP_NAMESPACE = f"{ENVIRONMENT}.{SERVICE_NAME}"
 
+MESSAGING_BROKERS = os.getenv("MESSAGING_BROKERS", "redpanda:9092").split(",")
+
 
 # Application definition
 

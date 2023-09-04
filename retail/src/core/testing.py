@@ -1,21 +1,22 @@
 import typing
 from unittest import mock
 
-from microservice_utils.google_cloud.adapters.pubsub import Publisher, Subscriber
 from strawberry_django.test.client import TestClient
 
-from iam import container
+from adapters.streaming import EventProducer
+from retail import container
 
 
 class DependencyOverrideMixin:
     _mocks: dict[str, mock.Mock] = {}
 
+    @property
+    def mocks(self) -> dict[str, mock.Mock]:
+        return self._mocks
+
     def mock_dependencies(self):
         # These mocks let us inspect dependency calls when testing
-        self._mocks["publisher"] = mock.Mock(spec=Publisher)
-        self._mocks["publisher"].publish.return_value = "1fe00f00800f"
-
-        self._mocks["subscriber"] = mock.Mock(spec=Subscriber)
+        self._mocks["event_producer"] = mock.Mock(spec=EventProducer)
 
         # Override the actual dependencies with our mocks
         for dep_name, mock_ in self._mocks.items():

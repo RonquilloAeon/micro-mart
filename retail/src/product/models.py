@@ -104,3 +104,6 @@ class Product(BaseModel, SlugMixin):
 
     def update_price(self, new_price: Decimal):
         raise NotImplementedError
+
+
+# TODO add seller model

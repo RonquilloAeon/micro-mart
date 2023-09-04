@@ -141,17 +141,6 @@ files = [
 ]
 
 [[package]]
-name = "colorama"
-version = "0.4.6"
-description = "Cross-platform colored terminal text."
-optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
-files = [
-    {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
-    {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
-]
-
-[[package]]
 name = "cuid2"
 version = "2.0.0"
 description = "Next generation GUIDs. Collision-resistant ids optimized for horizontal scaling and performance."
@@ -269,54 +258,6 @@ tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 [package.extras]
 argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
-
-[[package]]
-name = "django-choices-field"
-version = "2.2.2"
-description = "Django field that set/get django's new TextChoices/IntegerChoices enum."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "django_choices_field-2.2.2-py3-none-any.whl", hash = "sha256:bfdf5a8e098ead77eb1d5e32a85352af4a37a7b3f28fb5e74b8a17c1270a30bc"},
-    {file = "django_choices_field-2.2.2.tar.gz", hash = "sha256:1147a47d3972a49479be002c5c8ad0118863a8b936933597cfb3d8fcf257a578"},
-]
-
-[package.dependencies]
-django = ">=3.2"
-typing_extensions = ">=4.0.0"
-
-[[package]]
-name = "django-phonenumber-field"
-version = "7.1.0"
-description = "An international phone number field for django models."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "django-phonenumber-field-7.1.0.tar.gz", hash = "sha256:63721dbdc7424cd594a08d80f550e790cf6e7c903cbc0fb4dd9d86baac8b8c51"},
-    {file = "django_phonenumber_field-7.1.0-py3-none-any.whl", hash = "sha256:4eaab35fe9a163046dc3a47188771385c56a788e0e11b7bbcc662e1e6b7b9104"},
-]
-
-[package.dependencies]
-Django = ">=3.2"
-phonenumbers = {version = ">=7.0.2", optional = true, markers = "extra == \"phonenumbers\""}
-
-[package.extras]
-phonenumbers = ["phonenumbers (>=7.0.2)"]
-phonenumberslite = ["phonenumberslite (>=7.0.2)"]
-
-[[package]]
-name = "faker"
-version = "19.3.1"
-description = "Faker is a Python package that generates fake data for you."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "Faker-19.3.1-py3-none-any.whl", hash = "sha256:e2722fdf622cf24e974aaba15a3dee97a6f8b98d869bd827ff1af9c87695af46"},
-    {file = "Faker-19.3.1.tar.gz", hash = "sha256:a6624d9574623bb27dfca33fff94581cd7b23b562901db8ad59acbde9a52543e"},
-]
-
-[package.dependencies]
-python-dateutil = ">=2.4"
 
 [[package]]
 name = "google-api-core"
@@ -569,29 +510,6 @@ http2 = ["h2 (>=3,<5)"]
 socks = ["socksio (==1.*)"]
 
 [[package]]
-name = "iam"
-version = "0.1.0"
-description = "Identity and Access Management with Django."
-optional = false
-python-versions = "^3.11"
-files = []
-develop = true
-
-[package.dependencies]
-cuid2 = "^2.0.0"
-dependency-injector = "^4.41.0"
-Django = "^4.2.4"
-django-choices-field = "^2.2.2"
-django-phonenumber-field = {version = "^7.1.0", extras = ["phonenumbers"]}
-microservice-utils = {version = "^0.11.0", extras = ["events", "gcp-pubsub"]}
-psycopg2-binary = "^2.9.7"
-strawberry-graphql-django = "^0.16.0"
-
-[package.source]
-type = "directory"
-url = "iam"
-
-[[package]]
 name = "idna"
 version = "3.4"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -600,17 +518,6 @@ python-versions = ">=3.5"
 files = [
     {file = "idna-3.4-py3-none-any.whl", hash = "sha256:90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2"},
     {file = "idna-3.4.tar.gz", hash = "sha256:814f528e8dead7d329833b91c5faa87d60bf71824cd12a7530b5526063d02cb4"},
-]
-
-[[package]]
-name = "iniconfig"
-version = "2.0.0"
-description = "brain-dead simple config-ini parsing"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "iniconfig-2.0.0-py3-none-any.whl", hash = "sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374"},
-    {file = "iniconfig-2.0.0.tar.gz", hash = "sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3"},
 ]
 
 [[package]]
@@ -653,43 +560,6 @@ gcp-pubsub = ["google-cloud-pubsub (>=2,<3)", "tenacity (>=8,<9)"]
 novu = ["novu (==1.3.0)"]
 openai = ["masked-ai (>=1,<2)", "numpy (>=1,<2)", "openai (<1)"]
 pinecone = ["pinecone-client (>=2,<3)"]
-
-[[package]]
-name = "packaging"
-version = "23.1"
-description = "Core utilities for Python packages"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "packaging-23.1-py3-none-any.whl", hash = "sha256:994793af429502c4ea2ebf6bf664629d07c1a9fe974af92966e4b8d2df7edc61"},
-    {file = "packaging-23.1.tar.gz", hash = "sha256:a392980d2b6cffa644431898be54b0045151319d1e7ec34f0cfed48767dd334f"},
-]
-
-[[package]]
-name = "phonenumbers"
-version = "8.13.19"
-description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
-optional = false
-python-versions = "*"
-files = [
-    {file = "phonenumbers-8.13.19-py2.py3-none-any.whl", hash = "sha256:ba542f20f6dc83be8f127f240f9b5b7e7c1dec42aceff1879400d4dc0c781d81"},
-    {file = "phonenumbers-8.13.19.tar.gz", hash = "sha256:38180247697240ccedd74dec4bfbdbc22bb108b9c5f991f270ca3e41395e6f96"},
-]
-
-[[package]]
-name = "pluggy"
-version = "1.3.0"
-description = "plugin and hook calling mechanisms for python"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pluggy-1.3.0-py3-none-any.whl", hash = "sha256:d89c696a773f8bd377d18e5ecda92b7a3793cbe66c87060a6fb58c7b6e1061f7"},
-    {file = "pluggy-1.3.0.tar.gz", hash = "sha256:cf61ae8f126ac6f7c451172cf30e3e43d3ca77615509771b3a984a0730651e12"},
-]
-
-[package.extras]
-dev = ["pre-commit", "tox"]
-testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "proto-plus"
@@ -877,26 +747,6 @@ dotenv = ["python-dotenv (>=0.10.4)"]
 email = ["email-validator (>=1.0.3)"]
 
 [[package]]
-name = "pytest"
-version = "7.4.1"
-description = "pytest: simple powerful testing with Python"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "pytest-7.4.1-py3-none-any.whl", hash = "sha256:460c9a59b14e27c602eb5ece2e47bec99dc5fc5f6513cf924a7d03a578991b1f"},
-    {file = "pytest-7.4.1.tar.gz", hash = "sha256:2f2301e797521b23e4d2585a0a3d7b5e50fdddaaf7e7d6773ea26ddb17c213ab"},
-]
-
-[package.dependencies]
-colorama = {version = "*", markers = "sys_platform == \"win32\""}
-iniconfig = "*"
-packaging = "*"
-pluggy = ">=0.12,<2.0"
-
-[package.extras]
-testing = ["argcomplete", "attrs (>=19.2.0)", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
-
-[[package]]
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
@@ -930,28 +780,6 @@ urllib3 = ">=1.21.1,<3"
 [package.extras]
 socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
-
-[[package]]
-name = "retail"
-version = "0.1.0"
-description = "Retail and Products with Django"
-optional = false
-python-versions = "^3.11"
-files = []
-develop = true
-
-[package.dependencies]
-cuid2 = "^2.0.0"
-dependency-injector = "^4.41.0"
-Django = "^4.2.4"
-kafka-python = "^2.0.2"
-microservice-utils = {version = "^0.11.0", extras = ["events", "gcp-pubsub"]}
-psycopg2-binary = "^2.9.7"
-strawberry-graphql-django = "^0.16.0"
-
-[package.source]
-type = "directory"
-url = "retail"
 
 [[package]]
 name = "rfc3986"
@@ -1140,4 +968,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "7e98787342bcf7893ff70ae0e1c44f663b975e1fe07364b4d16cc26b2f8d69c8"
+content-hash = "f53fe4496a2255b3fb298d997fd680faa1d9cd0452cf645ca301544ed264754a"

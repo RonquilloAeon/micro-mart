@@ -1,21 +1,25 @@
 from decimal import Decimal
+from unittest.mock import call
 
 from django.test import TestCase
 from faker import Faker
+from microservice_utils.events import EventEnvelope
 from strawberry.relay.utils import to_base64
 
 from core.models import CUID_GENERATOR
 from core.testing import DependencyOverrideMixin, GraphQlMixin
+from product import constants, events
 from product.models import Product
 
 
 class TestProductSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
     def setUp(self):
         self.faker = Faker()
+        self.mock_dependencies()
 
     def _add_product(self, product_info: dict):
         # Add a product
-        return self.query(
+        result = self.query(
             """
             mutation ($input: ProductAddInput!) {
                 productAdd(input: $input) {
@@ -33,6 +37,23 @@ class TestProductSchema(TestCase, DependencyOverrideMixin, GraphQlMixin):
             """,
             variables={"input": product_info},
         )
+
+        # Event check
+        product = Product.objects.last()
+        product_id = to_base64("Product", product.id)
+
+        expected_event = events.ProductAdded(id=product_id, product_name=product.name)
+        calls = [
+            call(
+                constants.INTERNAL_TOPIC_NAME,
+                EventEnvelope.create(expected_event).to_publishable_json(),
+            )
+        ]
+        self.mocks["event_producer"].publish.assert_has_calls(calls)
+
+        self.reset_dependencies()
+
+        return result
 
     def test_add_and_query(self):
         product_info = {
