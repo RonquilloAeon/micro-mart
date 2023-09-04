@@ -84,6 +84,37 @@ services:
     volumes:
       - ./retail/src:/app/src
 
+  retail_worker:
+    build:
+      context: retail
+      dockerfile: Dockerfile
+      target: development
+    # entrypoint: tail -F any
+    entrypoint: watchfiles
+    command: worker.main
+    container_name: mm_retail_worker
+    depends_on:
+      - db
+      - pool
+      - redpanda
+    env_file:
+      - ./retail/.env
+    environment:
+      - DB_HOST=pool
+      - DB_NAME=retail
+      - DB_PORT=6432
+      - DB_PASSWORD=pgpass
+      - DB_USER=mmadmin
+      - DEBUG=true
+      - DJANGO_SETTINGS_MODULE=retail.settings
+      - ENVIRONMENT=development
+      - LOG_LEVEL=info
+      - SECRET_KEY=development_j2q7fzr1x_9m8vo6c_5lb3thye_x1w0u7k9qz6n2
+    platform: linux/amd64
+    restart: on-failure
+    volumes:
+      - ./retail/src:/app
+
   redpanda:
     command:
       - redpanda start

@@ -17,6 +17,9 @@ strawberry-graphql-django = "^0.16.0"
 kafka-python = "^2.0.2"
 
 
+[tool.poetry.group.dev.dependencies]
+watchfiles = "^0.20.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
