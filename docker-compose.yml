@@ -35,7 +35,7 @@ services:
     environment:
       # See https://www.amarjanica.com/docker-multiple-postgres-databases
       # And see https://github.com/mrts/docker-postgresql-multiple-databases
-      - POSTGRES_MULTIPLE_DATABASES=iam
+      - POSTGRES_MULTIPLE_DATABASES=iam,retail
       - POSTGRES_PASSWORD=pgpass
       - POSTGRES_USER=mmadmin
     platform: linux/amd64
@@ -54,3 +54,150 @@ services:
       - db
     platform: linux/amd64
     restart: on-failure
+
+  retail:
+    build:
+      context: retail
+      dockerfile: Dockerfile
+      target: development
+    container_name: mm_retail
+    depends_on:
+      - db
+      - pool
+      - redpanda
+    env_file:
+      - ./retail/.env
+    environment:
+      - DB_HOST=pool
+      - DB_NAME=retail
+      - DB_PORT=6432
+      - DB_PASSWORD=pgpass
+      - DB_USER=mmadmin
+      - DEBUG=true
+      - ENVIRONMENT=development
+      - LOG_LEVEL=info
+      - SECRET_KEY=development_j2q7fzr1x_9m8vo6c_5lb3thye_x1w0u7k9qz6n2
+    platform: linux/amd64
+    ports:
+      - "8012:8000"
+    restart: on-failure
+    volumes:
+      - ./retail/src:/app/src
+
+  retail_worker:
+    build:
+      context: retail
+      dockerfile: Dockerfile
+      target: development
+    # entrypoint: tail -F any
+    entrypoint: watchfiles
+    command: worker.main
+    container_name: mm_retail_worker
+    depends_on:
+      - db
+      - pool
+      - redpanda
+      - typesense
+    env_file:
+      - ./retail/.env
+    environment:
+      - DB_HOST=pool
+      - DB_NAME=retail
+      - DB_PORT=6432
+      - DB_PASSWORD=pgpass
+      - DB_USER=mmadmin
+      - DEBUG=true
+      - DJANGO_SETTINGS_MODULE=retail.settings
+      - ENVIRONMENT=development
+      - LOG_LEVEL=info
+      - SEARCH_API_KEY=mmdevelopment
+      - SEARCH_HOST=typesense
+      - SECRET_KEY=development_j2q7fzr1x_9m8vo6c_5lb3thye_x1w0u7k9qz6n2
+    platform: linux/amd64
+    restart: on-failure
+    volumes:
+      - ./retail/src:/app
+
+  redpanda:
+    command:
+      - redpanda start
+      - --smp 1
+      - --overprovisioned
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+      - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
+      - --advertise-pandaproxy-addr internal://redpanda:8082,external://localhost:18082
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      - --rpc-addr redpanda:33145
+      - --advertise-rpc-addr redpanda:33145
+    container_name: mm_redpanda
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    image: docker.redpanda.com/redpandadata/redpanda:v23.2.8
+    ports:
+      - "18081:18081"
+      - "18082:18082"
+      - "19092:19092"
+      - "19644:9644"
+    volumes:
+      - ./.redpanda:/var/lib/redpanda/data
+
+  redpandaconsole:
+    depends_on:
+      - redpanda
+    entrypoint: /bin/sh
+    command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
+    container_name: mm_redpanda_console
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda:9092"]
+          schemaRegistry:
+            enabled: true
+            urls: ["http://redpanda:8081"]
+        redpanda:
+          adminApi:
+            enabled: true
+            urls: ["http://redpanda:9644"]
+        connect:
+          enabled: true
+          clusters:
+            - name: local-connect-cluster
+              url: http://connect:8083
+    image: docker.redpanda.com/redpandadata/console:latest
+    ports:
+      - "8080:8080"
+
+  router:
+    container_name: mm_router
+    depends_on:
+      - iam
+      - retail
+    image: ghcr.io/apollographql/router:v1.28.1
+    environment:
+      APOLLO_ROUTER_SUPERGRAPH_PATH: /router/supergraph.graphql
+      APOLLO_ROUTER_CONFIG_PATH: /router/router.yml
+      APOLLO_ROUTER_LOG: debug
+      APOLLO_TELEMETRY_DISABLED: true
+    ports:
+      - 4000:4000
+    restart: on-failure
+    volumes:
+      - ./router/config:/router
+
+  typesense:
+    command: ["--data-dir", "/data"]
+    container_name: mm_typesense
+    environment:
+      - TYPESENSE_API_KEY=mmdevelopment
+    image: typesense/typesense:0.24.0
+    ports:
+      - "8108:8108"
+    restart: on-failure
+    volumes:
+      - ./.typesense:/data

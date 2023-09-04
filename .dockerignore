@@ -1,1 +1,6 @@
+.db/
+.idea/
+.nox/
+.redpanda/
+.typesense/
 .venv/
