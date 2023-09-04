@@ -159,5 +159,6 @@ cython_debug/
 .DS_Store
 .db/
 .redpanda/
+.typesense/
 
 *.graphql

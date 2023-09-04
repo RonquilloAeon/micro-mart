@@ -1,3 +1,4 @@
+import time
 import typing
 
 from kafka import KafkaConsumer, KafkaProducer
@@ -29,17 +30,21 @@ class EventConsumer:
         self._topic_namespace = topic_namespace
 
     def events(self, topic) -> typing.Generator[EventEnvelope, None, None]:
-        consumer = KafkaConsumer(
-            f"{self._topic_namespace}.{topic}",
-            bootstrap_servers=self._brokers,
-            group_id=self._group_id,
-            value_deserializer=lambda m: EventEnvelope.from_published_json(
-                m, allow_unregistered_events=True
-            ),
-        )
+        try:
+            consumer = KafkaConsumer(
+                f"{self._topic_namespace}.{topic}",
+                bootstrap_servers=self._brokers,
+                group_id=self._group_id,
+                value_deserializer=lambda m: EventEnvelope.from_published_json(
+                    m, allow_unregistered_events=True
+                ),
+            )
 
-        for event in consumer:
-            yield event.value
+            for event in consumer:
+                yield event.value
+        except Exception:
+            # TODO add logging
+            time.sleep(5)
 
     def close(self):
         self.consumer.close()

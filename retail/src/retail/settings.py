@@ -28,6 +28,10 @@ GCP_NAMESPACE = f"{ENVIRONMENT}.{SERVICE_NAME}"
 
 MESSAGING_BROKERS = os.getenv("MESSAGING_BROKERS", "redpanda:9092").split(",")
 
+SEARCH_API_KEY = os.getenv("SEARCH_API_KEY")
+SEARCH_HOST = os.getenv("SEARCH_HOST")
+SEARCH_PORT = os.getenv("SEARCH_PORT", "8108")
+
 
 # Application definition
 

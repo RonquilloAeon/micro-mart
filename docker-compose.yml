@@ -97,6 +97,7 @@ services:
       - db
       - pool
       - redpanda
+      - typesense
     env_file:
       - ./retail/.env
     environment:
@@ -109,6 +110,8 @@ services:
       - DJANGO_SETTINGS_MODULE=retail.settings
       - ENVIRONMENT=development
       - LOG_LEVEL=info
+      - SEARCH_API_KEY=mmdevelopment
+      - SEARCH_HOST=typesense
       - SECRET_KEY=development_j2q7fzr1x_9m8vo6c_5lb3thye_x1w0u7k9qz6n2
     platform: linux/amd64
     restart: on-failure
@@ -186,3 +189,15 @@ services:
     restart: on-failure
     volumes:
       - ./router/config:/router
+
+  typesense:
+    command: ["--data-dir", "/data"]
+    container_name: mm_typesense
+    environment:
+      - TYPESENSE_API_KEY=mmdevelopment
+    image: typesense/typesense:0.24.0
+    ports:
+      - "8108:8108"
+    restart: on-failure
+    volumes:
+      - ./.typesense:/data

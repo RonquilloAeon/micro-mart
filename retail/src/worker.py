@@ -1,6 +1,6 @@
 import django
 from dependency_injector.wiring import inject, Provide
-from microservice_utils.events import Event
+from microservice_utils.events import EventEnvelope
 
 django.setup()
 
@@ -16,11 +16,11 @@ EVENT_HANDLERS = {
 }
 
 
-def _handle_event(event: Event):
-    handlers = EVENT_HANDLERS.get(event.event_type, [])
+def _handle_event(envelope: EventEnvelope):
+    handlers = EVENT_HANDLERS.get(envelope.event_type, [])
 
     for handler in handlers:
-        handler(event)
+        handler(envelope.event)
 
 
 @inject

@@ -3,7 +3,6 @@ from unittest.mock import call
 
 from django.test import TestCase
 from faker import Faker
-from microservice_utils.events import EventEnvelope
 from strawberry.relay.utils import to_base64
 
 from core.models import CUID_GENERATOR

@@ -12,3 +12,5 @@ You need `nox` and `nox-poetry` in your system python environment. I recommend u
 - Open the Redpanda console: localhost:8080
 - Add the following topics:
     - `retail-service.product`
+
+After you update a microservice's dependencies, run `poetry update` in the root directory to update poetry for nox.

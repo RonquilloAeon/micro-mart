@@ -10,6 +10,8 @@ class ProductConfig(AppConfig):
     def ready(self):
         container.wire(
             modules=[
+                ".event_handlers",
+                ".management.commands.sync_product_search",
                 ".services",
             ]
         )

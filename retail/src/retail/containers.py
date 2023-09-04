@@ -1,6 +1,7 @@
 from dependency_injector import containers, providers
 
 from adapters.streaming import EventConsumer, EventProducer
+from adapters.typesense import TypesenseSearch
 
 
 class Container(containers.DeclarativeContainer):
@@ -16,4 +17,11 @@ class Container(containers.DeclarativeContainer):
         EventProducer,
         brokers=config.MESSAGING_BROKERS,
         topic_namespace=config.SERVICE_NAME,
+    )
+
+    search = providers.Factory(
+        TypesenseSearch,
+        config.SEARCH_API_KEY,
+        host=config.SEARCH_HOST,
+        port=config.SEARCH_PORT,
     )

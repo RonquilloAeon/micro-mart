@@ -917,6 +917,19 @@ files = [
 doc = ["reno", "sphinx", "tornado (>=4.5)"]
 
 [[package]]
+name = "typesense"
+version = "0.16.0"
+description = "Python client for Typesense, an open source and typo tolerant search engine."
+optional = false
+python-versions = ">=3"
+files = [
+    {file = "typesense-0.16.0-py2.py3-none-any.whl", hash = "sha256:d7a66eeae2ec146bba19dc5ce6afd52f5c4773eb029d0214fb5c8bc1511be033"},
+]
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.7.1"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -1002,4 +1015,4 @@ anyio = ">=3.0.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "58255632e9cb6482b0286607e7a4a24b27b90a1b28b50de51f20620159068ed3"
+content-hash = "d7a86bc515488cba55244fbed200a663e2e1f7fdb01291fb7ae85e90a56a1d74"
